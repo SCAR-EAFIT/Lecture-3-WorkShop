@@ -1,6 +1,6 @@
 ## Compilation Process
 
-The compilation of a source code on a finally executable involve multiple steps which are:
+The compilation of source code into a final executable involves multiple steps which are:
 
 ```mermaid
 graph TD
@@ -17,61 +17,40 @@ graph TD
     style E fill:#d9eaff
 ```
 
-Preprocesamiento:
-- Procesa directivas como #include, #define y #ifdef
-- Elimina comentarios
-- Expande macros
-- Incluye archivos de cabecera (.h)
-- Genera código fuente expandido (.i)
+**Preprocessing:**
+- Processes directives like #include, #define and #ifdef
+- Removes comments
+- Expands macros
+- Includes header files (.h)
+- Generates expanded source code (.i)
 
-Compilación:
-- Traduce el código C a código ensamblador
-- Realiza análisis léxico, sintáctico y semántico
-- Optimiza el código
-- Genera archivo de código ensamblador (.s)
+**Compilation:**
+- Translates C code to assembly code
+- Performs lexical, syntactic and semantic analysis
+- Optimizes the code
+- Generates assembly code file (.s)
 
-Ensamblado:
-- Convierte el código ensamblador a código objeto
-- Traduce instrucciones a código máquina
-- Genera archivo objeto (.obj o .o)
+**Assembly:**
+- Converts assembly code to object code
+- Translates instructions to machine code
+- Generates object file (.obj or .o)
 
-Enlazado:
-- Combina múltiples archivos objeto
-- Resuelve referencias a funciones externas
-- Incorpora bibliotecas estáticas y dinámicas
-- Produce el archivo ejecutable final (.exe)
+**Linking:**
+- Combines multiple object files
+- Resolves references to external functions
+- Incorporates static and dynamic libraries
+- Produces the final executable file (.exe)
 
 ## Example
-- Procesa directivas como #include, #define y #ifdef
-- Elimina comentarios
-- Expande macros
-- Incluye archivos de cabecera (.h)
-- Genera código fuente expandido (.i)
 
-Probando
+### Extended code generation
+The example file **example.cpp** in this folder contains the use of preprocessor directives to better illustrate this step. First, create the example.i file with the following command `g++ -E example.cpp -o example.i`. Take a look at the code (at the final part, which contains our code) and then generate it again with the following command `g++ -E example.cpp -DCHANGE_PREPROCESSOR -o example.i`. Now review it again. Do you notice differences? Can you explain what happened?
 
-### Step 1: Preprocessor
+### Assembly generator
+Subsequently, you can create the assembly code using the command `g++ -S example.i -o example.s`. Now review the resulting assembly code. What does this assembly code depend on? Are there ways to generate other types of assembly code?
 
+### Object file
+To generate the object code, which is no longer readable by humans, you can do it with the command `g++ -c example.s -o example.o`. What would the process be like if instead of the `g++` command we used the GNU assembler?
 
-g++ -o mi_programa compilation_example.o -lm -Wl,--verbose
-
-
-ld --hash-style=gnu \
-   --build-id \
-   --eh-frame-hdr \
-   -m elf_x86_64 \
-   -dynamic-linker /lib64/ld-linux-x86-64.so.2 \
-   -o mi_programa \
-   /usr/lib64/crt1.o \
-   /usr/lib64/crti.o \
-   /usr/lib/gcc/x86_64-redhat-linux/11/crtbegin.o \
-   -L/usr/lib/gcc/x86_64-redhat-linux/11 \
-   -L/usr/lib64 \
-   -L/lib64 \
-   compilation_example.o \
-   /usr/lib/gcc/x86_64-redhat-linux/11/libstdc++.so \
-   /lib64/libm.so.6 \
-   /lib64/libmvec.so.1 \
-   /lib64/libgcc_s.so.1 \
-   /usr/lib/gcc/x86_64-redhat-linux/11/libgcc.a \
-   /usr/lib64/crtn.o64-redhat-linux/11/crtend.o \
+### Linking process
+Finally, to obtain the final executable, do it using the wrapper `g++ example.o -o example.out`. Are you able to link the object file using the `ld` linker directly? Try to figure out how to do it. One possible solution involves seeing what flags it uses when doing the entire process with the `g++` wrapper and then trying to replicate it. For this, some very useful flags are `-lm -Wl,--verbose`

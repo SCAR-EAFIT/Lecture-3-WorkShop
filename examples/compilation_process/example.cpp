@@ -1,8 +1,9 @@
 #include<iostream>
 #include <math.h>
 
-// A simple program with a comentary
+// A simple program with
 
+// Preprocessor directives
 #ifdef CHANGE_PREPROCESSOR
     #define OWN_PI 5.0
 #else
